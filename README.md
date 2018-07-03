@@ -2,6 +2,8 @@
 
 The most easiest way to handle Android Runtime Permissions in Kotlin.
 
+![Example](/media/example.png)
+
 * [Inspiration](#inspiration)
 * [Add it to your app](#add-it-to-your-app)
 * [How to do it?](#how-to-do-it)
