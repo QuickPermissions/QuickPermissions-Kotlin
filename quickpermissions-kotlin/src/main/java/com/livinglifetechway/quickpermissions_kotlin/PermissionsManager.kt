@@ -22,18 +22,36 @@ fun Context?.runWithPermissions(
         options: QuickPermissionsOptions = QuickPermissionsOptions(),
         callback: () -> Unit
 ): Any? {
+    return runWithPermissionsHandler(this, permissions, callback, options)
+}
+
+/**
+ * Injects code to ask for permissions before executing any code that requires permissions
+ * defined in the annotation
+ */
+fun Fragment?.runWithPermissions(
+        vararg permissions: String,
+        options: QuickPermissionsOptions = QuickPermissionsOptions(),
+        callback: () -> Unit
+): Any? {
+    return runWithPermissionsHandler(this, permissions, callback, options)
+}
+
+private fun runWithPermissionsHandler(target: Any?, permissions: Array<out String>, callback: () -> Unit, options: QuickPermissionsOptions): Nothing? {
     Log.d(TAG, "runWithPermissions: start")
 
     // get the permissions defined in annotation
     Log.d(TAG, "runWithPermissions: permissions to check: $permissions")
 
     // get target
-    val target = this
-
     if (target is AppCompatActivity || target is Fragment) {
         Log.d(TAG, "runWithPermissions: context found")
 
-        val context = this
+        val context = when (target) {
+            is Context -> target
+            is Fragment -> target.context
+            else -> null
+        }
 
         // check if we have the permissions
         if (PermissionsUtil.hasSelfPermission(context, arrayOf(*permissions))) {
