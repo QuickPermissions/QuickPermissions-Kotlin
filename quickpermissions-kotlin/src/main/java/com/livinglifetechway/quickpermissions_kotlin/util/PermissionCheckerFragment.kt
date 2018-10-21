@@ -9,9 +9,7 @@ import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.util.Log
-import com.livinglifetechway.k4kotlin.orZero
 import org.jetbrains.anko.alert
-
 
 /**
  * A simple [Fragment] subclass.
@@ -61,7 +59,7 @@ class PermissionCheckerFragment : Fragment() {
     fun clean() {
         // permission request flow is finishing
         // let the caller receive callback about it
-        if (quickPermissionsRequest?.deniedPermissions?.size.orZero() > 0)
+        if (quickPermissionsRequest?.deniedPermissions?.size ?: 0 > 0)
             mListener?.onPermissionsDenied(quickPermissionsRequest)
 
         removeRequestPermissionsRequest()

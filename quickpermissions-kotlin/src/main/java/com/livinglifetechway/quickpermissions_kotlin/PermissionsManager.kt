@@ -4,8 +4,6 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.livinglifetechway.k4kotlin.TAG
-import com.livinglifetechway.k4kotlin.transact
 import com.livinglifetechway.quickpermissions_kotlin.util.PermissionCheckerFragment
 import com.livinglifetechway.quickpermissions_kotlin.util.PermissionsUtil
 import com.livinglifetechway.quickpermissions_kotlin.util.QuickPermissionsRequest
@@ -82,16 +80,18 @@ private fun runWithPermissionsHandler(target: Any?, permissions: Array<out Strin
                 permissionCheckerFragment = PermissionCheckerFragment.newInstance()
                 when (context) {
                     is AppCompatActivity -> {
-                        context.supportFragmentManager.transact {
+                        context.supportFragmentManager.beginTransaction().apply {
                             add(permissionCheckerFragment, PermissionCheckerFragment::class.java.canonicalName)
+                            commit()
                         }
                         // make sure fragment is added before we do any context based operations
                         context.supportFragmentManager?.executePendingTransactions()
                     }
                     is Fragment -> {
                         // this does not work at the moment
-                        context.childFragmentManager.transact {
+                        context.childFragmentManager.beginTransaction().apply {
                             add(permissionCheckerFragment, PermissionCheckerFragment::class.java.canonicalName)
+                            commit()
                         }
                         // make sure fragment is added before we do any context based operations
                         context.childFragmentManager.executePendingTransactions()
