@@ -150,7 +150,11 @@ class PermissionCheckerFragment : Fragment() {
                         clean()
                     }
                 }?.apply { isCancelable = false }?.show()
+                return
             }
+
+            // if handlePermanentlyDenied = false and handleRationale = false
+            mListener?.onPermissionsDenied(quickPermissionsRequest)
         }
     }
 
