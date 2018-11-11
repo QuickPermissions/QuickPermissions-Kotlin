@@ -99,6 +99,12 @@ class PermissionCheckerFragment : Fragment() {
      */
     private fun handlePermissionResult(permissions: Array<String>, grantResults: IntArray) {
         if (PermissionsUtil.hasSelfPermission(context, permissions)) {
+
+            // set the denied permissions to empty as all the permissions are granted
+            // this is required as clean will be called which can invoke on permissions denied
+            // if it finds some permissions in the denied list
+            quickPermissionsRequest?.deniedPermissions = emptyArray()
+
             // we are good to go!
             mListener?.onPermissionsGranted(quickPermissionsRequest)
 
