@@ -17,6 +17,10 @@ import com.livinglifetechway.quickpermissions_sample.databinding.ActivityAllKotl
 
 class AllKotlinActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TAG = "AllKotlinActivity"
+    }
+
     /**
      * You can hardcode the options like this
      * However for the sample purpose the options is dynamically generated based on the
@@ -61,6 +65,8 @@ class AllKotlinActivity : AppCompatActivity() {
     }
 
     private fun methodRequiresPermissions(quickPermissionsOptions: QuickPermissionsOptions) = runWithPermissions(Manifest.permission.WRITE_CALENDAR, Manifest.permission.RECORD_AUDIO, options = quickPermissionsOptions) {
+        Log.d(TAG, "methodRequiresPermissions: Cal and microphone permission granted")
+
         val toast = Toast.makeText(this, "Cal and microphone permission granted", Toast.LENGTH_LONG)
         toast.setGravity(Gravity.CENTER, 0, 0)
         toast.show()
