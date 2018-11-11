@@ -13,11 +13,12 @@ import com.livinglifetechway.quickpermissions_kotlin.util.QuickPermissionsOption
 
 class AllKotlinActivity : AppCompatActivity() {
 
-    val quickPermissionsOption = QuickPermissionsOptions(
+    private val quickPermissionsOption = QuickPermissionsOptions(
             rationaleMessage = "Custom rational message",
             permanentlyDeniedMessage = "Custom permanently denied message",
             rationaleMethod = { rationaleCallback(it) },
-            permanentDeniedMethod = { permissionsPermanentlyDenied(it) }
+            permanentDeniedMethod = { permissionsPermanentlyDenied(it) },
+            permissionsDeniedMethod = { whenPermAreDenied(it) }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,11 +59,17 @@ class AllKotlinActivity : AppCompatActivity() {
                 .show()
     }
 
-    fun whenPermAreDenied(req: QuickPermissionsRequest) {
+    private fun whenPermAreDenied(req: QuickPermissionsRequest) {
         // handle something when permissions are not granted and the request method cannot be called
-        val toast = Toast.makeText(this, req.deniedPermissions.size.toString() + " permission(s) denied. This feature will not work.", Toast.LENGTH_LONG)
-        toast.setGravity(Gravity.CENTER, 0, 0)
-        toast.show()
+        AlertDialog.Builder(this)
+                .setTitle("Permissions Denied")
+                .setMessage("This is the custom permissions denied dialog. \n${req.deniedPermissions.size}/${req.permissions.size} permissions denied")
+                .setPositiveButton("OKAY") { _, _ -> }
+                .setCancelable(false)
+                .show()
+//        val toast = Toast.makeText(this, req.deniedPermissions.size.toString() + " permission(s) denied. This feature will not work.", Toast.LENGTH_LONG)
+//        toast.setGravity(Gravity.CENTER, 0, 0)
+//        toast.show()
     }
 
 }
