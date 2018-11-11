@@ -18,6 +18,7 @@
             android:id="@+id/handleRationale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Handle Rationale?" />
 
         <android.support.v7.widget.AppCompatCheckBox
@@ -36,6 +37,7 @@
             android:id="@+id/handlePermanentlyDenied"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Handle Permanently Denied?" />
 
         <android.support.v7.widget.AppCompatCheckBox
@@ -49,6 +51,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Use custom permanently denied callback?" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/customDeniedMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Attach permissions denied callback?" />
 
         <Space
             android:layout_width="wrap_content"

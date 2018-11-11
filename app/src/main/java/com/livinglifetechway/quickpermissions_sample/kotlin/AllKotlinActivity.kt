@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import com.livinglifetechway.k4kotlin.onClick
@@ -52,8 +53,9 @@ class AllKotlinActivity : AppCompatActivity() {
             if (mBinding.customPermanentlyDeniedMethod.isChecked) {
                 options.permanentDeniedMethod = { permissionsPermanentlyDenied(it) }
             }
-            options.permissionsDeniedMethod = { whenPermAreDenied(it) }
-
+            if (mBinding.customDeniedMethod.isChecked) {
+                options.permissionsDeniedMethod = { whenPermAreDenied(it) }
+            }
             methodRequiresPermissions(options)
         }
     }
