@@ -1,9 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.livinglifetechway.quickpermissions_sample.kotlin.AllKotlinActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-</android.support.constraint.ConstraintLayout>
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context="com.livinglifetechway.quickpermissions_sample.kotlin.AllKotlinActivity">
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/handleRationale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Handle Rationale?" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/customRationaleMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use custom rationale message?" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/customRationaleMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use custom rationale callback?" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/handlePermanentlyDenied"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Handle Permanently Denied?" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/customPermanentlyDeniedMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use custom permanently denied message?" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/customPermanentlyDeniedMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use custom permanently denied callback?" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="24dp"
+            android:text="Start Permissions Flow" />
+    </LinearLayout>
+</layout>
