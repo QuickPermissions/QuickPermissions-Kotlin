@@ -98,6 +98,16 @@ class PermissionCheckerFragment : Fragment() {
      * @param grantResults A list of permission result <b>Granted</b> or <b>Denied</b>
      */
     private fun handlePermissionResult(permissions: Array<String>, grantResults: IntArray) {
+        // add a check with the permissions list
+        // if the permissions list is empty, that means system has told that permissions request
+        // is invalid somehow or discarded the previous request
+        // this can happen in case when the multiple permissions requests are sent
+        // simultaneously to the system
+        if (permissions.isEmpty()) {
+            Log.w(TAG, "handlePermissionResult: Permissions result discarded. You might have called multiple permissions request simultaneously")
+            return
+        }
+
         if (PermissionsUtil.hasSelfPermission(context, permissions)) {
 
             // set the denied permissions to empty as all the permissions are granted
