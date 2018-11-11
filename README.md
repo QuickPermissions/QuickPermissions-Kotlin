@@ -49,7 +49,7 @@ In your **app**'s `build.gradle` file, add the following dependency:
 
 ```
 dependencies {
-   implementation 'com.github.quickpermissions:quickpermissions-kotlin:0.3.0'
+   implementation 'com.github.quickpermissions:quickpermissions-kotlin:0.4.0'
 }
 ```
 
