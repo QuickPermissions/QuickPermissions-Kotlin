@@ -12,7 +12,7 @@ import android.util.Log
 import org.jetbrains.anko.alert
 
 /**
- * A simple [Fragment] subclass.
+ * This fragment holds the single permission request and holds it until the flow is completed
  */
 class PermissionCheckerFragment : Fragment() {
 
@@ -26,19 +26,19 @@ class PermissionCheckerFragment : Fragment() {
     }
 
     companion object {
-        private val TAG = Companion::class.java.simpleName
+        private const val TAG = "QuickPermissionsKotlin"
         private const val PERMISSIONS_REQUEST_CODE = 199
         fun newInstance(): PermissionCheckerFragment = PermissionCheckerFragment()
     }
 
-    var mListener: QuickPermissionsCallback? = null
+    private var mListener: QuickPermissionsCallback? = null
 
     fun setListener(listener: QuickPermissionsCallback) {
         mListener = listener
         Log.d(TAG, "onCreate: listeners set")
     }
 
-    fun removeListener() {
+    private fun removeListener() {
         mListener = null
     }
 
@@ -52,23 +52,34 @@ class PermissionCheckerFragment : Fragment() {
         this.quickPermissionsRequest = quickPermissionsRequest
     }
 
-    fun removeRequestPermissionsRequest() {
+    private fun removeRequestPermissionsRequest() {
         quickPermissionsRequest = null
     }
 
     fun clean() {
-        // permission request flow is finishing
-        // let the caller receive callback about it
-        if (quickPermissionsRequest?.deniedPermissions?.size ?: 0 > 0)
-            mListener?.onPermissionsDenied(quickPermissionsRequest)
+        if (quickPermissionsRequest != null) {
+            // permission request flow is finishing
+            // let the caller receive callback about it
+            if (quickPermissionsRequest?.deniedPermissions?.size ?: 0 > 0)
+                mListener?.onPermissionsDenied(quickPermissionsRequest)
 
-        removeRequestPermissionsRequest()
-        removeListener()
+            removeRequestPermissionsRequest()
+            removeListener()
+        } else {
+            Log.w(TAG, "clean: QuickPermissionsRequest has already completed its flow. " +
+                    "No further callbacks will be called for the current flow.")
+        }
     }
 
     fun requestPermissionsFromUser() {
-        Log.d(TAG, "requestPermissionsFromUser: requesting permissions")
-        requestPermissions(quickPermissionsRequest?.permissions.orEmpty(), PERMISSIONS_REQUEST_CODE)
+        if (quickPermissionsRequest != null) {
+            Log.d(TAG, "requestPermissionsFromUser: requesting permissions")
+            requestPermissions(quickPermissionsRequest?.permissions.orEmpty(), PERMISSIONS_REQUEST_CODE)
+        } else {
+            Log.w(TAG, "requestPermissionsFromUser: QuickPermissionsRequest has already completed its flow. " +
+                    "Cannot request permissions again from the request received from the callback. " +
+                    "You can start the new flow by calling runWithPermissions() { } again.")
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -154,15 +165,20 @@ class PermissionCheckerFragment : Fragment() {
             }
 
             // if handlePermanentlyDenied = false and handleRationale = false
-            mListener?.onPermissionsDenied(quickPermissionsRequest)
+            // This will call permissionsDenied method
+            clean()
         }
     }
 
     fun openAppSettings() {
-        val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS,
-                fromParts("package", activity?.packageName, null))
-        //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivityForResult(intent, PERMISSIONS_REQUEST_CODE)
+        if (quickPermissionsRequest != null) {
+            val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS,
+                    fromParts("package", activity?.packageName, null))
+            //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivityForResult(intent, PERMISSIONS_REQUEST_CODE)
+        } else {
+            Log.w(TAG, "openAppSettings: QuickPermissionsRequest has already completed its flow. Cannot open app settings")
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
