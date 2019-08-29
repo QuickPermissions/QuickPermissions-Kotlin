@@ -96,9 +96,9 @@ You can optionally pass on the `options` object to that method, which can do som
 
 Things you can do with it:
 
-* `handleRationale` : true/false value indicating weather the library should handle rational dialog or not.
+* `handleRationale` : true/false value indicating whether the library should handle rational dialog or not.
 * `rationaleMessage` : Custom rational message which will override default value if specified.
-* `handlePermanentlyDenied` : true/false value indicating weather the library should handle permissions permanently denied dialog or not.
+* `handlePermanentlyDenied` : true/false value indicating whether the library should handle permissions permanently denied dialog or not.
 * `permanentlyDeniedMessage` : Custom permanently denied message which will override default value if specified.
 * `rationaleMethod` : Handle rational callback yourself. This will pass on the callback to this function if specified. This will provide you will `QuickPermissionsRequest` instance on which you can call, `proceed()` to continue asking permissions again, or call `cancel()` to cancel the flow.
 * `permanentDeniedMethod` : Handle permissions permanently denied callback yourself. This will pass on the callback to this function if specified. This will provide you will `QuickPermissionsRequest` instance on which you can call `openAppSettings()` on it to continue flow or `cancel()` to cancel the flow.
