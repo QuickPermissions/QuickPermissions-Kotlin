@@ -145,7 +145,7 @@ private fun <T> runWithPermissionsHandler(target: Any?, permissions: Array<out S
 
             // start requesting permissions for the first time
             permissionCheckerFragment.requestPermissionsFromUser()
-            return result!!
+            return result ?: Unit as T
         }
     } else {
         // context is null
