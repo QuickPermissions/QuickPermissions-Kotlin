@@ -15,11 +15,11 @@ private const val TAG = "runWithPermissions"
  * Injects code to ask for permissions before executing any code that requires permissions
  * defined in the annotation
  */
-fun Context?.runWithPermissions(
+fun <T> Context?.runWithPermissions(
         vararg permissions: String,
         options: QuickPermissionsOptions = QuickPermissionsOptions(),
-        callback: () -> Unit
-): Any? {
+        callback: () -> T
+): T {
     return runWithPermissionsHandler(this, permissions, callback, options)
 }
 
@@ -27,15 +27,15 @@ fun Context?.runWithPermissions(
  * Injects code to ask for permissions before executing any code that requires permissions
  * defined in the annotation
  */
-fun Fragment?.runWithPermissions(
+fun <T> Fragment?.runWithPermissions(
         vararg permissions: String,
         options: QuickPermissionsOptions = QuickPermissionsOptions(),
-        callback: () -> Unit
-): Any? {
+        callback: () -> T
+): T {
     return runWithPermissionsHandler(this, permissions, callback, options)
 }
 
-private fun runWithPermissionsHandler(target: Any?, permissions: Array<out String>, callback: () -> Unit, options: QuickPermissionsOptions): Nothing? {
+private fun <T> runWithPermissionsHandler(target: Any?, permissions: Array<out String>, callback: () -> T, options: QuickPermissionsOptions): T {
     Log.d(TAG, "runWithPermissions: start")
 
     // get the permissions defined in annotation
@@ -54,7 +54,7 @@ private fun runWithPermissionsHandler(target: Any?, permissions: Array<out Strin
         // check if we have the permissions
         if (PermissionsUtil.hasSelfPermission(context, arrayOf(*permissions))) {
             Log.d(TAG, "runWithPermissions: already has required permissions. Proceed with the execution.")
-            callback()
+            return callback()
         } else {
             // we don't have required permissions
             // begin the permission request flow
@@ -100,11 +100,12 @@ private fun runWithPermissionsHandler(target: Any?, permissions: Array<out Strin
             }
 
             // set callback to permission checker fragment
+            var result: T? = null
             permissionCheckerFragment.setListener(object : PermissionCheckerFragment.QuickPermissionsCallback {
                 override fun onPermissionsGranted(quickPermissionsRequest: QuickPermissionsRequest?) {
                     Log.d(TAG, "runWithPermissions: got permissions")
                     try {
-                        callback()
+                        result = callback()
                     } catch (throwable: Throwable) {
                         throwable.printStackTrace()
                     }
@@ -144,6 +145,7 @@ private fun runWithPermissionsHandler(target: Any?, permissions: Array<out Strin
 
             // start requesting permissions for the first time
             permissionCheckerFragment.requestPermissionsFromUser()
+            return result!!
         }
     } else {
         // context is null
@@ -151,5 +153,4 @@ private fun runWithPermissionsHandler(target: Any?, permissions: Array<out Strin
         // crash the app RIGHT NOW!
         throw IllegalStateException("Found " + target!!::class.java.canonicalName + " : No support from any classes other than AppCompatActivity/Fragment")
     }
-    return null
 }
